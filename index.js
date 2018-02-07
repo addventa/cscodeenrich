@@ -3,8 +3,11 @@ var readline = require('readline');
 var fs = require('fs');
 var EventEmitter = require('events').EventEmitter;
 
+var CONFIG = require('./config.json');
+
 
 var mappingLoader = new EventEmitter();
+var topFilesUpdater = new EventEmitter();
 
 
 function loadMapping(fileName) {
@@ -43,14 +46,27 @@ function loadMapping(fileName) {
 }
 
 
+function updateTopFiles(topFolder, mapping) {
+  console.log("starting to modify top files:" + topFolder);
 
 
-loadMapping("C:/java/projects/cscodeenrich/x.txt");
 
+  topFilesUpdater.emit('done');
+}
+
+
+
+loadMapping(CONFIG.mapping);
 
 mappingLoader.on('done', function(mapping) {
   console.log(mapping);
+
+  updateTopFiles(CONFIG.cstop, mapping);
+
 });
 
+topFilesUpdater.on('done', function() {
+  console.log("DONE.");
+});
 
 
