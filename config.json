@@ -1,5 +1,5 @@
 {
-  "mapping": "x.txt",
+  "mapping": "mapping.txt",
   "cstop": "C:/cs/chatbot_ech/TOPS",
   "cstopoutput": "C:/cs/chatbot_ech/TOPS/output"
 }

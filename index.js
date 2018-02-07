@@ -7,7 +7,7 @@ var CONFIG = require('./config.json');
 
 
 var mappingLoader = new EventEmitter();
-
+var topFileUpdater = new EventEmitter();
 
 
 function loadMapping(fileName) {
@@ -32,9 +32,11 @@ function loadMapping(fileName) {
     if (line.startsWith("bs")) {
       // console.log('is a bs line: ' + line);
       current = res.bs[line] = new Array();
+      allKeys.push(line);
     } else if (line.startsWith("us")) {
       // console.log('is a us line: ' + line);
       current = res.us[line] = new Array();
+      allKeys.push(line);
     } else {
       // console.log('is a data line: ' + line);
       current.push(line);
@@ -63,7 +65,7 @@ function findTopFiles(topFolder, outputFolder, mapping) {
 function getReplacementInMapping(type, key) {
   var list = mapping[type][key];
   if (list!=null) {
-    mapping[type][key].used = true;
+    usedKeys.push(key);
     res = '';
     if (type=='us') {
       res = '#!' + list.join('\n#!');
@@ -73,7 +75,8 @@ function getReplacementInMapping(type, key) {
     return res;  
   } else {
     console.log("WARNING: not in mapping: " + key);
-    logs['notInMapping'].push(type);
+    logs['notInMapping'].push(key);
+    console.log( logs['notInMapping'] );
     return null;
   }
 }
@@ -110,51 +113,59 @@ function updateTopFile(topFile) {
     }
     newContent += newLine + '\n';    
 
-  
-  
-              
-  
-  
-  
-  
   }).on('close', function() {         
-    console.log("writing new file");
     fs.writeFile(CONFIG.cstopoutput + '/' + topFile, newContent);
+    console.log("done with: " + topFile);
+    topFileUpdater.emit('done', topFile);
   });
 
 }
 
 
-
-loadMapping(CONFIG.mapping);
-
-var topFiles = [];
-findTopFiles(CONFIG.cstop);
-
 var logs = {
   'notInTop': [],
   'notInMapping': []
 };
+var usedKeys = [];
 
 var mapping;
+var allKeys = [];
+
+var topFiles = [];
+var topFilesLeft;
+
+
+loadMapping(CONFIG.mapping);
+findTopFiles(CONFIG.cstop);
 
 mappingLoader.on('done', function() {
   console.log(mapping);
+  
+  topFilesLeft = topFiles.slice(); 
+  
   for(var i=0; i<topFiles.length; i++) {
     updateTopFile(topFiles[i]);
   }
 });
 
+topFileUpdater.on('done', function(updatedFile) {
+  topFilesLeft.pop(updatedFile);
 
-
-// when?
-console.log(logs);
-
-/*
-topFilesUpdater.on('done', function() {
-  console.log("DONE.");
+  if (topFilesLeft.length==0) {
+    finish();
+  }  
 });
-*/
 
-
+function finish() {
+  
+  for (var i=0; i<allKeys.length; i++) {
+    var key = allKeys[i];
+    if (! usedKeys.includes(key)) {
+      logs['notInTop'].push(key);
+    }
+  }
+    
+  console.log(logs);
+  console.log("DONE.");
+}
 
