@@ -1,0 +1,23 @@
+
+bsOkDone
+Ok it's done.
+Done.
+Oops!... I Did It Again.
+
+usCreditCardCeiling
+I want to change the ceiling of my credit card
+augment my credit card maximum
+
+bsRephraseSentence
+Please rephrase the sentence.
+Can you rephrase what you said, please?
+
+usReplaceUser
+I want to replace a user
+I would like to replace a user
+I have a new user
+
+bsWaitingMessage
+Please wait
+Wait a moment
+
