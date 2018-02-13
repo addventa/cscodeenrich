@@ -1,5 +1,5 @@
 {
   "mapping": "sample-mapping.txt",
-  "cstop": "C:/cs/chatbot_ech/TOPS",
-  "cstopoutput": "C:/cs/chatbot_ech/TOPS/output"
+  "cstop": "C:/cs/chatbot_ech/BOTDATA/prj",
+  "cstopoutput": "C:/cs/chatbot_ech/BOTDATA/prj/output"
 }

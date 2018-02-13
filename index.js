@@ -49,8 +49,8 @@ function loadMapping(fileName) {
 }
 
 
-function findTopFiles(topFolder, outputFolder, mapping) {
-  console.log("finding top files to modify:" + topFolder);
+function findTopFiles(topFolder) {
+  console.log("finding top files to modify: " + topFolder);
   
   fs.readdir(topFolder, (err, files) => {
     files.forEach(file => {
