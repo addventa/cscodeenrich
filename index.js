@@ -68,7 +68,7 @@ function getReplacementInMapping(type, key) {
     usedKeys.push(key);
     res = '';
     if (type=='us') {
-      res = '#!' + list.join('\n#!');
+      res = '#! ' + list.join('\n#! ');
     } else if (type=='bs') {
       res = '[ ' + list.join(' ][ ') + ']';
     }
